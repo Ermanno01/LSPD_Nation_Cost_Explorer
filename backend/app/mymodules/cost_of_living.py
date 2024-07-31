@@ -6,7 +6,7 @@ import os
 class Cost_of_living:
 
     def __init__(self, file_path):
-       # print(f"Looking for CSV at: {file_path}")
+        # print(f"Looking for CSV at: {file_path}")
         # print(os.listdir(file_path))
         # state_data = Cost_of_living(file_path)
         base_dir = os.path.dirname(__file__)
@@ -25,5 +25,5 @@ class Cost_of_living:
             return {'error': "state not found"}  # Return a dictionary directly
 
     def getTop10(self):
-        top_10_rows = self.df.nlargest(10, self.df.columnss[4])
+        top_10_rows = self.df.nlargest(10, self.df.columnss[4])[1, 4]
         return top_10_rows.to_json(orient='records')
