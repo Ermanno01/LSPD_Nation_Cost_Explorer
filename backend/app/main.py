@@ -4,21 +4,25 @@ Backend module for the FastAPI application.
 This module defines a FastAPI application that serves
 as the backend for the project.
 """
-from .mymodules.cost_of_living import Cost_of_living
+from app.mymodules.cost_of_living import Cost_of_living
 #from .mymodules/cost_of_living import *
 from fastapi import FastAPI
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from datetime import datetime
 import pandas as pd
+import sys 
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 
-
-state_data = Cost_of_living('./data/Cost_of_Living_Index_2022.csv')
+#state_data = Cost_of_living('./data/Cost_of_Living_Index_2022.csv')
 app = FastAPI()
 
 
-
+csv_path = os.path.join(os.path.dirname(__file__), 'mymodules', 'data', 'Cost_of_Living_Index_2022.csv')
+state_data = Cost_of_living(csv_path)
 
 @app.get('/')
 def read_root():
