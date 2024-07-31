@@ -1,20 +1,23 @@
+from app.main import app
 import pytest
 import os
 import sys
 from fastapi.testclient import TestClient
 
 # Add the project root to the sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..')))
 # Now you can do the relative import
-from app.main import app
 
 
 client = TestClient(app)
+
 
 def test_read_root():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"Hello": "World"}
+
 
 def test_read_item_existing_state():
     # Replace 'Existing State' with a valid state name from your dataset
@@ -24,11 +27,13 @@ def test_read_item_existing_state():
     data = response.json()
     assert "error" not in data
 
+
 def test_read_item_non_existing_state():
     state_name = "NonExistingState"
     response = client.get(f"/query/{state_name}")
     assert response.status_code == 200
     assert response.json() == {"error": "state not found"}
+
 
 def test_dump_all_top10():
     response = client.get("/query/top10")
