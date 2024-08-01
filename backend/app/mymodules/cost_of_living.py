@@ -25,5 +25,11 @@ class Cost_of_living:
             return {'error': "state not found"}  # Return a dictionary directly
 
     def getTop10(self):
-        top_10_rows = self.df.nlargest(10, self.df.columnss[4])[1, 4]
-        return top_10_rows.to_json(orient='records')
+        # Get the top 10 rows based on the 5th column (index 4)
+        top_10_rows = self.df.nlargest(10, self.df.columns[4])
+        
+        # Select only the 1st and 5th columns (index 0 and 4)
+        selected_columns = top_10_rows.iloc[:, [1, 4]]
+        
+        # Convert to JSON format
+        return selected_columns.to_json(orient='records')

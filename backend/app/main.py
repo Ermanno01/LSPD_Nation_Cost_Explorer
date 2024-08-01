@@ -4,21 +4,27 @@ Backend module for the FastAPI application.
 This module defines a FastAPI application that serves
 as the backend for the project.
 """
-from app.mymodules.cost_of_living import Cost_of_living
-# from .mymodules/cost_of_living import *
-from fastapi import FastAPI
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from datetime import datetime
-import pandas as pd
-import sys
+from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
+from app.mymodules.cost_of_living import Cost_of_living
 import os
+import sys
+import json 
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-
-# state_data = Cost_of_living('./data/Cost_of_Living_Index_2022.csv')
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1", "http://localhost"],
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+# state_data = Cost_of_living('./data/Cost_of_Living_Index_2022.csv')
 
 
 csv_path = os.path.join(os.path.dirname(__file__),
@@ -53,6 +59,11 @@ def read_item(state: str):
     return state_info
 
 
-@app.get('/query/top10')
+@app.get('/list/top10')
 def dump_all_top10():
-    return state_data.getTop10()
+    data = state_data.getTop10()
+    # If getTop10() returns a JSON string, load it into a Python list/dictionary
+    if isinstance(data, str):
+        data = json.loads(data)
+    return data
+

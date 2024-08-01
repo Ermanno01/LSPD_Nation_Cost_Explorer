@@ -1,10 +1,4 @@
-"""
-Frontend module for the Flask application.
-
-This module defines a simple Flask application that serves as the frontend for the project.
-"""
-
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests  # Import the requests library to make HTTP requests
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -13,71 +7,84 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
 
 # Configuration for the FastAPI backend URL
-FASTAPI_BACKEND_HOST = 'http://backend'  # Replace with the actual URL of your FastAPI backend
+FASTAPI_BACKEND_HOST = 'http://0.0.0.0:8000'  # Replace with the actual URL of your FastAPI backend
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
 class QueryForm(FlaskForm):
-    person_name = StringField('Person Name:')
-    submit = SubmitField('Get Birthday from FastAPI Backend')
+    state_name = StringField('State Name:')
+    submit = SubmitField('Search')
 
 
 @app.route('/')
 def index():
     """
-    Render the index page.
-
-    Returns:
-        str: Rendered HTML content for the index page.
-    """
-    # Fetch the date from the backend
-    date_from_backend = fetch_date_from_backend()
-    return render_template('index.html', date_from_backend=date_from_backend)
-
-def fetch_date_from_backend():
-    """
-    Function to fetch the current date from the backend.
-
-    Returns:
-        str: Current date in ISO format.
-    """
-    backend_url = 'http://backend/get-date'  # Adjust the URL based on your backend configuration
-    try:
-        response = requests.get(backend_url)
-        response.raise_for_status()  # Raise an HTTPError for bad responses
-        return response.json().get('date', 'Date not available')
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching date from backend: {e}")
-        return 'Date not available'
-
-
-@app.route('/internal', methods=['GET', 'POST'])
-def internal():
-    """
-    Render the internal page.
-
+    Render the index page and display the top 10 countries' cost of living data.
+    
     Returns:
         str: Rendered HTML content for the index page.
     """
     form = QueryForm()
-    error_message = None  # Initialize error message
+    top10_data = fetch_top10_from_backend()
+    return render_template('index.html', top10_data=top10_data, form=form)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    """
+    Render the search page and display the state data.
+
+    Returns:
+        str: Rendered HTML content for the search page.
+    """
+    form = QueryForm()
+    state_data = None
 
     if form.validate_on_submit():
-        person_name = form.person_name.data
+        state_name = form.state_name.data
+        state_data = fetch_state_data_from_backend(state_name)
 
-        # Make a GET request to the FastAPI backend
-        fastapi_url = f'{FASTAPI_BACKEND_HOST}/query/{person_name}'
+    return render_template('index.html', form=form, state_data=state_data)
+
+
+def fetch_top10_from_backend():
+    """
+    Fetch the top 10 countries' cost of living data from the backend.
+
+    Returns:
+        list: List of dictionaries containing the top 10 countries' data.
+    """
+    fastapi_url = f'{FASTAPI_BACKEND_HOST}/list/top10'
+    try:
+        print(fastapi_url)
         response = requests.get(fastapi_url)
+        print(response)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
+        print(response.json())
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching top 10 data from backend: {e}")
+        return []
 
-        if response.status_code == 200:
-            # Extract and display the result from the FastAPI backend
-            data = response.json()
-            result = data.get('birthday', f'Error: Birthday not available for {person_name}')
-            return render_template('internal.html', form=form, result=result, error_message=error_message)
-        else:
-            error_message = f'Error: Unable to fetch birthday for {person_name} from FastAPI Backend'
 
-    return render_template('internal.html', form=form, result=None, error_message=error_message)
+def fetch_state_data_from_backend(state_name):
+    """
+    Fetch state data from the backend.
+
+    Args:
+        state_name (str): Name of the state.
+
+    Returns:
+        dict: State data or an error message.
+    """
+    fastapi_url = f'{BACKEND_URL}{state_name}'
+    try:
+        response = requests.get(fastapi_url)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching state data from backend: {e}")
+        return {'error': 'State not found'}
 
 
 if __name__ == '__main__':
