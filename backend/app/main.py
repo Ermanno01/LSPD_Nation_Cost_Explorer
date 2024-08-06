@@ -4,13 +4,13 @@ Backend module for the FastAPI application.
 This module defines a FastAPI application that serves
 as the backend for the project.
 """
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 from app.mymodules.cost_of_living import Cost_of_living
 import os
 import sys
-import json 
+import json
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -67,3 +67,9 @@ def dump_all_top10():
         data = json.loads(data)
     return data
 
+# autocomplete route
+@app.get('/autocomplete')
+def autocomplete(query: str = Query(None, min_length=1)):
+    res = state_data.getCountries()
+    filtered_suggestions = [s for s in res if s.lower().startswith(query.lower())][:5]
+    return JSONResponse(content=filtered_suggestions)

@@ -20,7 +20,7 @@ class Cost_of_living:
         result = self.df[self.df['Country'] == state_name]
         if not result.empty:
             # Return as a list of dictionaries
-            return result.to_dict(orient='records')
+            return result.iloc[:, 2:].to_dict(orient='records')
         else:
             return {'error': "state not found"}  # Return a dictionary directly
 
@@ -33,3 +33,6 @@ class Cost_of_living:
         
         # Convert to JSON format
         return selected_columns.to_json(orient='records')
+
+    def getCountries(self):
+        return self.df['Country']

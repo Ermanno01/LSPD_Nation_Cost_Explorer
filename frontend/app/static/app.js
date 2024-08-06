@@ -8,23 +8,76 @@ document.addEventListener("DOMContentLoaded", function() {
         fetchSearchResults();
     });
 
+    document.getElementById('compForm1').addEventListener('submit', function(event) {
+        event.preventDefault();
+        fetchCompResults1();
+    });
+
+    document.getElementById('compForm2').addEventListener('submit', function(event) {
+        event.preventDefault();
+        fetchCompResults2();
+    });
+
+    // Autocomplete functionality
+    addAutocomplete('stateInput');
+    addAutocomplete('compInput1');
+    addAutocomplete('compInput2');
+
+    function addAutocomplete(inputId) {
+        let inputElement = document.getElementById(inputId);
+
+        inputElement.addEventListener('input', function() {
+            let query = this.value.trim().toLowerCase();
+            if (query.length > 0) {
+                fetch(`http://0.0.0.0:8000/autocomplete?query=${query}`)
+                    .then(response => response.json())
+                    .then(suggestions => {
+                        // Filter suggestions to only those that start with the query and limit to 5
+                        let filteredSuggestions = suggestions.filter(s => s.toLowerCase().startsWith(query)).slice(0, 5);
+
+                        // Clear existing datalist options
+                        let dataList = document.getElementById(`${inputId}-datalist`);
+                        if (!dataList) {
+                            dataList = document.createElement('datalist');
+                            dataList.id = `${inputId}-datalist`;
+                            inputElement.setAttribute('list', dataList.id);
+                            document.body.appendChild(dataList);
+                        }
+                        dataList.innerHTML = '';
+
+                        // Add filtered suggestions to the datalist
+                        filteredSuggestions.forEach(suggestion => {
+                            let option = document.createElement('option');
+                            option.value = suggestion;
+                            dataList.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching autocomplete suggestions:', error);
+                    });
+            }
+        });
+    }
+
     // Fetch top 10 from the backend
     function fetchTop10() {
         fetch('http://localhost:8000/list/top10')
-            .then(response => response.json())  // Parse the response as JSON
+            .then(response => response.json())
             .then(data => {
-                console.log('Parsed Data:', data);  // Log the parsed data
-                console.log('Type of data:', typeof data);
-                console.log('Is data an array?', Array.isArray(data));
-
                 let top10List = document.getElementById('top10List');
                 top10List.innerHTML = '';  // Clear previous data
 
-                // Check if data is an array before calling forEach
                 if (Array.isArray(data)) {
                     data.forEach(item => {
-                        let listItem = document.createElement('div');
-                        listItem.textContent = `Country: ${item['Country']}, Cost of Living Plus Rent Index: ${item['Cost of Living Plus Rent Index']}`;
+                        let listItem = document.createElement('tr');
+                        let countryCell = document.createElement('td');
+                        countryCell.textContent = item['Country'];
+                        listItem.appendChild(countryCell);
+
+                        let indexCell = document.createElement('td');
+                        indexCell.textContent = item['Cost of Living Plus Rent Index'];
+                        listItem.appendChild(indexCell);
+
                         top10List.appendChild(listItem);
                     });
                 } else {
@@ -45,15 +98,106 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 let searchResults = document.getElementById('searchResults');
                 searchResults.innerHTML = '';  // Clear previous data
+
                 if (data.error) {
                     searchResults.textContent = data.error;
                 } else {
-                    searchResults.textContent = JSON.stringify(data, null, 2);
+                    let table = document.createElement('table');
+                    table.className = 'table table-bordered';
+
+                    for (const [key, value] of Object.entries(data[0])) {
+                        let row = document.createElement('tr');
+                        let keyCell = document.createElement('td');
+                        keyCell.textContent = key;
+                        row.appendChild(keyCell);
+
+                        let valueCell = document.createElement('td');
+                        valueCell.textContent = value;
+                        row.appendChild(valueCell);
+
+                        table.appendChild(row);
+                    }
+
+                    searchResults.appendChild(table);
                 }
             })
             .catch(error => {
                 console.error('Error fetching search results:', error);
                 document.getElementById('searchResults').textContent = 'Error loading search results';
+            });
+    }
+
+    // Fetch comparison results for State 1
+    function fetchCompResults1() {
+        let stateName = document.getElementById('compInput1').value;
+        fetch(`http://0.0.0.0:8000/query/${stateName}`)
+            .then(response => response.json())
+            .then(data => {
+                let searchResults = document.getElementById('stateData1');
+                searchResults.innerHTML = '';  // Clear previous data
+
+                if (data.error) {
+                    searchResults.textContent = data.error;
+                } else {
+                    let table = document.createElement('table');
+                    table.className = 'table table-bordered';
+
+                    for (const [key, value] of Object.entries(data[0])) {
+                        let row = document.createElement('tr');
+                        let keyCell = document.createElement('td');
+                        keyCell.textContent = key;
+                        row.appendChild(keyCell);
+
+                        let valueCell = document.createElement('td');
+                        valueCell.textContent = value;
+                        row.appendChild(valueCell);
+
+                        table.appendChild(row);
+                    }
+
+                    searchResults.appendChild(table);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching comparison results for State 1:', error);
+                document.getElementById('stateData1').textContent = 'Error loading search results';
+            });
+    }
+
+    // Fetch comparison results for State 2
+    function fetchCompResults2() {
+        let stateName = document.getElementById('compInput2').value;
+        fetch(`http://0.0.0.0:8000/query/${stateName}`)
+            .then(response => response.json())
+            .then(data => {
+                let searchResults = document.getElementById('stateData2');
+                searchResults.innerHTML = '';  // Clear previous data
+
+                if (data.error) {
+                    searchResults.textContent = data.error;
+                } else {
+                    let table = document.createElement('table');
+                    table.className = 'table table-bordered';
+
+                    for (const [key, value] of Object.entries(data[0])) {
+                        let row = document.createElement('tr');
+                        let keyCell = document.createElement('td');
+                        keyCell.textContent = key;
+                        row.appendChild(keyCell);
+
+                        let valueCell = document.createElement('td');
+                        valueCell.textContent = value;
+                        row.appendChild(valueCell);
+
+                        table.appendChild(row);
+                    }
+
+                    searchResults.appendChild(table);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching comparison results for State 2:', error);
+                document.getElementById('stateData2').textContent = 'Error loading search results';
             });
     }
 });

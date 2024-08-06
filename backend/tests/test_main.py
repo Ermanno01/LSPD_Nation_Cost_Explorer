@@ -8,15 +8,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from app.main import app
 
-
 client = TestClient(app)
-
 
 def test_read_root():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"Hello": "World"}
-
 
 def test_read_item_existing_state():
     # Replace 'Existing State' with a valid state name from your dataset
@@ -26,16 +23,23 @@ def test_read_item_existing_state():
     data = response.json()
     assert "error" not in data
 
-
 def test_read_item_non_existing_state():
     state_name = "NonExistingState"
     response = client.get(f"/query/{state_name}")
     assert response.status_code == 200
     assert response.json() == {"error": "state not found"}
 
-
 def test_dump_all_top10():
-    response = client.get("/query/top10")
+    response = client.get("/list/top10")
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0  # Assuming your dataset has more than 10 states
+
+def test_autocomplete_suggestions():
+    query = "Ca"  # This should match some states in your dataset
+    response = client.get(f"/autocomplete?query={query}")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) > 0  # Ensure that there are suggestions
+    for suggestion in data:
+        assert suggestion.lower().startswith(query.lower())  # Ensure each suggestion starts with the query
