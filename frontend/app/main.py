@@ -4,10 +4,15 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secure secret key
+# Replace with a secure secret key
+app.config['SECRET_KEY'] = 'your_secret_key'
 
 # Configuration for the FastAPI backend URL
-FASTAPI_BACKEND_HOST = 'http://0.0.0.0:8000'  # Replace with the actual URL of your FastAPI backend
+# Replace with the actual URL of your FastAPI backend
+#FASTAPI_BACKEND_HOST = 'http://backend:8085' 
+FASTAPI_BACKEND_HOST = 'http://backend_nce:8000' #for local server
+print(FASTAPI_BACKEND_HOST)
+
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
 
 
@@ -19,8 +24,9 @@ class QueryForm(FlaskForm):
 @app.route('/')
 def index():
     """
-    Render the index page and display the top 10 countries' cost of living data.
-    
+    Render the index page and display
+    the top 10 countries' cost of living data.
+
     Returns:
         str: Rendered HTML content for the index page.
     """
@@ -56,11 +62,8 @@ def fetch_top10_from_backend():
     """
     fastapi_url = f'{FASTAPI_BACKEND_HOST}/list/top10'
     try:
-        print(fastapi_url)
         response = requests.get(fastapi_url)
-        print(response)
         response.raise_for_status()  # Raise an HTTPError for bad responses
-        print(response.json())
         return response.json()
     except requests.exceptions.RequestException as e:
         print(f"Error fetching top 10 data from backend: {e}")

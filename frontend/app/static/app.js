@@ -1,4 +1,9 @@
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
+
+    const backend = "http://localhost:8085";
     // Fetch and display the Top 10 list on page load
     fetchTop10();
 
@@ -29,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
         inputElement.addEventListener('input', function() {
             let query = this.value.trim().toLowerCase();
             if (query.length > 0) {
-                fetch(`http://0.0.0.0:8000/autocomplete?query=${query}`)
+                fetch(`${backend}/autocomplete?query=${query}`)
                     .then(response => response.json())
                     .then(suggestions => {
                         // Filter suggestions to only those that start with the query and limit to 5
@@ -61,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fetch top 10 from the backend
     function fetchTop10() {
-        fetch('http://localhost:8000/list/top10')
+        fetch(`${backend}/list/top10`)
             .then(response => response.json())
             .then(data => {
                 let top10List = document.getElementById('top10List');
@@ -93,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fetch search results from the backend
     function fetchSearchResults() {
         let stateName = document.getElementById('stateInput').value;
-        fetch(`http://0.0.0.0:8000/query/${stateName}`)
+        fetch(`${backend}/query/${stateName}`)
             .then(response => response.json())
             .then(data => {
                 let searchResults = document.getElementById('searchResults');
@@ -130,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fetch comparison results for State 1
     function fetchCompResults1() {
         let stateName = document.getElementById('compInput1').value;
-        fetch(`http://0.0.0.0:8000/query/${stateName}`)
+        fetch(`${backend}/query/${stateName}`)
             .then(response => response.json())
             .then(data => {
                 let searchResults = document.getElementById('stateData1');
@@ -167,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fetch comparison results for State 2
     function fetchCompResults2() {
         let stateName = document.getElementById('compInput2').value;
-        fetch(`http://0.0.0.0:8000/query/${stateName}`)
+        fetch(`${backend}/query/${stateName}`)
             .then(response => response.json())
             .then(data => {
                 let searchResults = document.getElementById('stateData2');

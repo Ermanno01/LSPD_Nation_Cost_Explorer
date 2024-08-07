@@ -19,14 +19,19 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1", "http://localhost"],
+    # allow_origins=["http://127.0.0.1",
+     #              "http://localhost",
+      #             "http://frontend_nce"
+       #            ],
+    allow_origins=[
+        "*"
+    ],
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
 )
-# state_data = Cost_of_living('./data/Cost_of_Living_Index_2022.csv')
 
-
+# Initialize the Cost_of_living object with the path to the CSV file
 csv_path = os.path.join(os.path.dirname(__file__),
                         'mymodules', 'data', 'Cost_of_Living_Index_2022.csv')
 state_data = Cost_of_living(csv_path)
@@ -38,7 +43,7 @@ def read_root():
     Root endpoint for the backend.
 
     Returns:
-        dict: A simple greeting.
+        dict: A simple greeting message.
     """
     return {"Hello": "World"}
 
@@ -46,30 +51,49 @@ def read_root():
 @app.get('/query/{state}')
 def read_item(state: str):
     """
-    Endpoint to query state data based on state.
+    Endpoint to query state data based on the state name.
 
     Args:
-        state (str): The name of the state.
+        state (str): The name of the state to query.
 
     Returns:
         dict: Cost information for the provided state.
+              If the state is not found, returns an error message.
     """
-
     state_info = state_data.getState(state)
     return state_info
 
 
 @app.get('/list/top10')
 def dump_all_top10():
+    """
+    Endpoint to get the top 10 states based on the cost of living index.
+
+    Returns:
+        list: A list of dictionaries containing
+        the top 10 states and their cost of living index.
+    """
     data = state_data.getTop10()
-    # If getTop10() returns a JSON string, load it into a Python list/dictionary
+    # If getTop10() returns a JSON string,
+    # load it into a Python list/dictionary
     if isinstance(data, str):
         data = json.loads(data)
     return data
 
-# autocomplete route
+
 @app.get('/autocomplete')
 def autocomplete(query: str = Query(None, min_length=1)):
+    """
+    Endpoint to get state suggestions based on the user's input.
+
+    Args:
+        query (str): The input string to filter state names by.
+
+    Returns:
+        JSONResponse: A JSON response containing a
+        list of up to 5 state names that start with the given query.
+    """
     res = state_data.getCountries()
-    filtered_suggestions = [s for s in res if s.lower().startswith(query.lower())][:5]
+    filtered_suggestions = [
+        s for s in res if s.lower().startswith(query.lower())][:5]
     return JSONResponse(content=filtered_suggestions)

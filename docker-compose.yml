@@ -3,15 +3,19 @@ services:
   frontend:
     build:
       context: ./frontend
+    container_name: frontend_nce
     ports:
-      - "8080:80"
+      - "8082:80"  # Maps container port 80 to host port 8082
     volumes:
       - ./frontend:/app
+    depends_on:
+      - backend  # Ensure frontend starts after backend
 
   backend:
     build:
       context: ./backend
+    container_name: backend_nce
     ports:
-      - "8081:80"
+      - "8085:8000"  # Maps container port 8000 to host port 8085
     volumes:
       - ./backend:/app
