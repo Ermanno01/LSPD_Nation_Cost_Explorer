@@ -1,191 +1,73 @@
-# swdevel-lab-hfarm
- Skeleton Project for the Lab of Software Project Development
+# Cost of Living Comparator
 
-# Flask and FastAPI Dockerized Project
+## Introduction
 
-This project demonstrates a simple web application using Flask as the frontend and FastAPI as the backend. The frontend allows querying birthdays from the backend using a form. The project is Dockerized for easy deployment.
+Welcome to the Cost of Living Comparator, a web application designed to help users compare the cost of living across various countries. By searching for a specific country, users can get detailed cost information, view the top 10 most expensive countries, and receive suggestions based on their input.
 
-## Architecture
+## Features
 
-The project follows a simple client-server architecture:
+- **Country Search:** Easily find the cost of living, rent index and other informations for any country.
+- **Top 10 Countries:** View a list of the top 10 countries with the highest cost of living.
+- **Autocomplete Suggestions:** Receive dynamic suggestions as you type the name of a country.
+- **User-friendly Interface:** Enjoy an intuitive and easy-to-navigate interface.
+- **Comparision between Countries** Compare two different states to check out differences between them
 
-1. **Frontend (Flask):**
-   - Represents the user interface or client side.
-   - Built with Flask, a lightweight web framework for Python.
-   - Responsible for rendering web pages and user interaction, including the form for querying the backend.
+## Technologies Used
 
-2. **Backend (FastAPI):**
-   - Represents the server or backend of the application.
-   - Built with FastAPI, a modern web framework for building APIs with Python.
-   - Handles requests from the frontend, including querying birthdays and providing the current date.
+- **Flask (Frontend)**
+- **FastAPI (Backend)**
+- **HTML**: Used for the structure of the web page.
+- **CSS**: Used for the style and layout of the web page.
+- **Bootstrap**: CSS library for responsive design and predefined components.
+- **JavaScript**: Used for the logic and interactivity of the page.
+- **WTForms**: Python library for handling web forms in Flask.
+- **Docker**: Containerization tool used to deploy the frontend and backend services.
 
-3. **Docker Compose:**
-   - Orchestrates the deployment of both frontend and backend as separate containers.
-   - Ensures seamless communication between frontend and backend containers.
-   - Simplifies the deployment and management of the entire application.
+## CSV Dataset Used in the Project
 
-### Communication
-Bidirectional communication is established between the Frontend (Flask) and Backend (FastAPI). Docker Compose facilitates this communication, allowing the components to work together seamlessly.
+This section outlines the essential dataset used in the project:
 
-## Project Structure
+- **Cost_of_Living_Index_2022.csv:** Contains cost of living data for various countries around the world.
 
-- `backend/`: FastAPI backend implementation.
-    - Dockerfile: Dockerfile for building the backend image.
-    - main.py: Main backend application file.
-    - requirements.txt: List of Python dependencies for the backend.
-- `frontend/`: Flask frontend implementation.
-    - Dockerfile: Dockerfile for building the frontend image.
-    - static/: Folder for static files (CSS, JavaScript, etc.).
-    - templates/: Folder for HTML templates.
-    - main.py: Main frontend application file.
-    - requirements.txt: List of Python dependencies for the frontend.
-- `docker-compose.yml`: Docker Compose configuration for running both frontend and backend.
+## Steps to Run
 
-## Prerequisites
+### Step 1: Clone the Repository
 
-- Docker
-- Visual Studio Code (Optional, for debugging)
+Open a terminal and clone the repository:
 
-## Usage
+```bash
+git clone https://github.com/your-repository/cost-of-living-comparator.git
+cd cost-of-living-comparator
+```
 
-1. Clone the repository and navigate in the directory:
+### Step 2: Set Up the Environment
 
+You can set up the environment using Docker.
+
+
+#### Step 2A: Docker Method
+
+1.  Navigate to the project directory:
     ```bash
-    git clone REPO_URL
-    cd swdevel-lab-hfarm
+    cd cost-of-living-comparator
     ```
 
-2. Build and run the Docker containers:
-
+2.  Build and start the containers:
     ```bash
     docker-compose up --build
     ```
 
-    This will start both the frontend and backend containers.
-    
-> **NOTE:** Uncomment the lines in the Dockerfiles that follow the section labeled `Command to run the application` and comment out the ones labeled `Command to keep the container running`. This will allow you to access the backend and frontend, as described in Point 3.
+### Step 3: Access the Application
 
-3. Open your web browser and navigate to [http://localhost:8080](http://localhost:8080) to access the `frontend` and [http://localhost:8081](http://localhost:8081) to access the `backend`.
-
-4. Use the form on the frontend to query birthdays from the backend.
-
-## Shutting Down the Docker Containers
-
-To shut down the running Docker containers, you can use the following steps:
-
-1. Open a terminal.
-
-2. Navigate to the project root directory.
-
-3. Run the following command to stop and remove the Docker containers:
-
-    ```bash
-    docker-compose down
-    ```
-
-## Starting and Stopping Containers Individually
-
-If you need to start or stop the containers individually, you can use the following commands:
-
-- **Start Frontend Container:**
-
-    ```bash
-    docker-compose up frontend
-    ```
-
-- **Stop Frontend Container:**
-
-    ```bash
-    docker-compose stop frontend
-    ```
-
-- **Start Backend Container:**
-
-    ```bash
-    docker-compose up backend
-    ```
-
-- **Stop Backend Container:**
-
-    ```bash
-    docker-compose stop backend
-    ```
-
-Make sure to replace `frontend` and `backend` with the appropriate service names from your `docker-compose.yml` file.
-
-### Notes:
-
-When stopping containers individually, the `docker-compose down` command is not required.
-Now you can manage the lifecycle of your Docker containers more flexibly.
+Open a web browser and navigate to the following URL: **http://localhost:8082**
 
 
-## Debugging with Visual Studio Code and Docker Extension
+## Contributing
 
-1. Open the project in Visual Studio Code:
+The Cost of Living Comparator project was developed by Ermanno Scaramuzzi, a student at Ca' Foscari university of Venice and H-Farm campus. Contributions, suggestions, and feedback are welcome to help improve the application. Future enhancements may include expanding the dataset, optimizing search functionality, and adding more detailed cost of living comparisons.
 
-    ```bash
-    code .
-    ```
+Feel free to fork the repository and submit a pull request for any improvements.
 
-2. Set breakpoints in your Python code as needed.
+## Contacts
 
-3. Build and run the Docker containers:
-
-    ```bash
-    docker-compose up --build
-    ```
-
-    Ensure that your Docker containers are running.
-
-4a. Install the [Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) for Visual Studio Code.
-4b. Install the [Remote Development Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) for Visual Studio Code
-
-5. Open the "Docker" view in Visual Studio Code by clicking on the Docker icon in the Activity Bar.
-
-6. Under "Containers," you should see your running containers. Right-click on the container running your Flask or FastAPI application.
-
-7. Select "Attach Visual Studio Code" from the context menu. This will configure the container for debugging.
-
-8. Open the Run view in Visual Studio Code and select the "Python: Remote Attach" configuration.
-
-9. Click the "Run" button to start the debugger.
-
-10. Access the frontend in your web browser and trigger the actions you want to debug.
-
-### Notes:
-
-- Ensure that your Docker containers are running (`docker-compose up --build`) before attaching Visual Studio Code.
-
-- Adjust the container name in the "Docker: Attach to Node" configuration if needed.
-
-- The provided configurations assume that your Flask or FastAPI application is running with the debugger attached. Adjust the configurations if needed.
-
-- If using Flask, ensure that the Flask application is started with the `--no-reload` option to prevent automatic reloading, which can interfere with debugging.
-
-- Debugging FastAPI requires configuring the FastAPI application to run with the `--reload` option. Update the FastAPI Dockerfile CMD accordingly.
-
-- After the debugger is attached, you can use breakpoints, inspect variables, and step through your code as needed.
-
-
-## Adding New Modules to a Running Docker Container
-
-1. **Install Additional Modules:**
-    ```bash
-    pip install new_module
-    ```
-   Replace `new_module` with the names of the module you want to install.
-
-2. **Verify Installed Modules:**
-    ```bash
-    pip list
-    ```
-   This command displays a list of installed Python packages, including the newly added modules.
-
-3. **Optional: Update requirements.txt:**
-    ```bash
-    pip freeze > requirements.txt
-    ```
-   If you want to keep track of the installed modules, you may choose to update the `requirements.txt` file inside the container.
-
-
-Now, the additional Python modules are installed in the running container, and you've performed these actions directly from the VS Code terminal. If these changes are intended for production, consider updating the `requirements.txt` file and rebuilding the Docker container.
+Feel free to contact me at **886878@stud.unive.it**
