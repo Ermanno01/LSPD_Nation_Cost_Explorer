@@ -1,4 +1,4 @@
-# Cost of Living Comparator
+# Nation Cost Explorer
 
 ## Introduction
 
@@ -36,8 +36,8 @@ This section outlines the essential dataset used in the project:
 Open a terminal and clone the repository:
 
 ```bash
-git clone https://github.com/your-repository/cost-of-living-comparator.git
-cd cost-of-living-comparator
+git clone https://github.com/Ermanno01/LSPD_Nation_Cost_Explorer.git
+cd LSPD_Nation_Cost_Explorer
 ```
 
 ### Step 2: Set Up the Environment
@@ -49,7 +49,7 @@ You can set up the environment using Docker.
 
 1.  Navigate to the project directory:
     ```bash
-    cd cost-of-living-comparator
+    cd LSPD_Nation_Cost_Explorer
     ```
 
 2.  Build and start the containers:
@@ -64,10 +64,14 @@ Open a web browser and navigate to the following URL: **http://localhost:8082**
 
 ## Contributing
 
-The Cost of Living Comparator project was developed by Ermanno Scaramuzzi, a student at Ca' Foscari university of Venice and H-Farm campus. Contributions, suggestions, and feedback are welcome to help improve the application. Future enhancements may include expanding the dataset, optimizing search functionality, and adding more detailed cost of living comparisons.
+The 'Nation Cost Explorer' project was developed by Ermanno Scaramuzzi, a student at Ca' Foscari university of Venice and H-Farm campus. Contributions, suggestions, and feedback are welcome to help improve the application. Future enhancements may include expanding the dataset, optimizing search functionality, and adding more detailed cost of living comparisons.
 
 Feel free to fork the repository and submit a pull request for any improvements.
 
 ## Contacts
 
 Feel free to contact me at **886878@stud.unive.it**
+
+## Screen
+
+![alt text](./site_view.png)
