@@ -9,8 +9,7 @@ app.config['SECRET_KEY'] = 'your_secret_key'
 
 # Configuration for the FastAPI backend URL
 # Replace with the actual URL of your FastAPI backend
-#FASTAPI_BACKEND_HOST = 'http://backend:8085' 
-FASTAPI_BACKEND_HOST = 'http://backend_nce:8000' #for local server
+FASTAPI_BACKEND_HOST = 'http://backend_nce:8000'
 print(FASTAPI_BACKEND_HOST)
 
 BACKEND_URL = f'{FASTAPI_BACKEND_HOST}/query/'
