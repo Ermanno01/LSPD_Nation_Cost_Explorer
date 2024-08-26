@@ -28,7 +28,7 @@ Welcome to the Cost of Living Comparator, a web application designed to help use
 This section outlines the essential dataset used in the project:
 
 - **Cost_of_Living_Index_2022.csv:** Contains cost of living data for various countries around the world.
-This is the link for the csv: https://www.kaggle.com/code/olgaluzhetska/cost-of-living-analysis
+This is the link for the csv: https://www.kaggle.com/datasets/ankanhore545/cost-of-living-index-2022
 
 ## Steps to Run
 
