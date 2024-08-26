@@ -10,16 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
         fetchSearchResults();
     });
 
-    document.getElementById('compForm1').addEventListener('submit', function(event) {
-        event.preventDefault();
-        fetchCompResults1();
-    });
-
-    document.getElementById('compForm2').addEventListener('submit', function(event) {
-        event.preventDefault();
-        fetchCompResults2();
-    });
-
     // Autocomplete functionality
     addAutocomplete('stateInput');
     addAutocomplete('compInput1');
@@ -129,22 +119,30 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    // Fetch comparison results for State 1
-    function fetchCompResults1() {
-        let stateName = document.getElementById('compInput1').value;
-        fetch(`${backend}/query/${stateName}`)
-            .then(response => response.json())
-            .then(data => {
-                let searchResults = document.getElementById('stateData1');
-                searchResults.innerHTML = '';  // Clear previous data
+    // Handle comparison button click
+    document.getElementById('vsButton').addEventListener('click', function() {
+        let state1 = document.getElementById('compInput1').value;
+        let state2 = document.getElementById('compInput2').value;
 
-                if (data.error) {
-                    searchResults.textContent = data.error;
+        if (state1 && state2) {
+            Promise.all([
+                fetch(`${backend}/query/${state1}`),
+                fetch(`${backend}/query/${state2}`)
+            ])
+            .then(responses => Promise.all(responses.map(response => response.json())))
+            .then(([data1, data2]) => {
+                let stateData1 = document.getElementById('stateData1');
+                let stateData2 = document.getElementById('stateData2');
+                stateData1.innerHTML = '';  // Clear previous data
+                stateData2.innerHTML = '';  // Clear previous data
+
+                if (data1.error) {
+                    stateData1.textContent = data1.error;
                 } else {
                     let table = document.createElement('table');
                     table.className = 'table table-bordered';
 
-                    for (const [key, value] of Object.entries(data[0])) {
+                    for (const [key, value] of Object.entries(data1[0])) {
                         let row = document.createElement('tr');
                         let keyCell = document.createElement('td');
                         keyCell.textContent = key;
@@ -157,31 +155,16 @@ document.addEventListener("DOMContentLoaded", function() {
                         table.appendChild(row);
                     }
 
-                    searchResults.appendChild(table);
+                    stateData1.appendChild(table);
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching comparison results for State 1:', error);
-                document.getElementById('stateData1').textContent = 'Error loading search results';
-            });
-    }
 
-    // Fetch comparison results for State 2
-    function fetchCompResults2() {
-        let stateName = document.getElementById('compInput2').value;
-        fetch(`${backend}/query/${stateName}`)
-            .then(response => response.json())
-            .then(data => {
-                let searchResults = document.getElementById('stateData2');
-                searchResults.innerHTML = '';  // Clear previous data
-
-                if (data.error) {
-                    searchResults.textContent = data.error;
+                if (data2.error) {
+                    stateData2.textContent = data2.error;
                 } else {
                     let table = document.createElement('table');
                     table.className = 'table table-bordered';
 
-                    for (const [key, value] of Object.entries(data[0])) {
+                    for (const [key, value] of Object.entries(data2[0])) {
                         let row = document.createElement('tr');
                         let keyCell = document.createElement('td');
                         keyCell.textContent = key;
@@ -194,12 +177,17 @@ document.addEventListener("DOMContentLoaded", function() {
                         table.appendChild(row);
                     }
 
-                    searchResults.appendChild(table);
+                    stateData2.appendChild(table);
                 }
             })
             .catch(error => {
-                console.error('Error fetching comparison results for State 2:', error);
-                document.getElementById('stateData2').textContent = 'Error loading search results';
+                console.error('Error fetching comparison results:', error);
+                document.getElementById('stateData1').textContent = 'Error loading comparison results';
+                document.getElementById('stateData2').textContent = 'Error loading comparison results';
             });
-    }
+        } else {
+            alert('Please select both states to compare.');
+        }
+    });
+
 });

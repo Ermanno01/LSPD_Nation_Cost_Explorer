@@ -53,15 +53,7 @@
                         <strong>State 1</strong>
                     </div>
                     <div class="card-body">
-                        <form id="compForm1" class="d-flex">
-                            <input class="form-control me-2" type="search" id="compInput1" placeholder="Search for a state" aria-label="Search">
-                            <button class="btn" type="submit" 
-                                style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 12px 24px; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease; font-size: 16px; font-weight: bold;" 
-                                onmouseover="this.style.backgroundColor='#218838'" 
-                                onmouseout="this.style.backgroundColor='#28a745'">
-                                Search
-                            </button>
-                        </form>
+                        <input class="form-control me-2" type="search" id="compInput1" placeholder="Search for a state" aria-label="Search">
                         <div id="stateData1" class="mt-4"></div>
                     </div>
                 </div>
@@ -69,7 +61,12 @@
 
             <!-- VS Section -->
             <div class="col-md-2 d-flex justify-content-center align-items-center">
-                <h4 class="vs-text">VS</h4>
+                <button id="vsButton" class="btn" 
+                        style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 12px 24px; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease; font-size: 16px; font-weight: bold;" 
+                        onmouseover="this.style.backgroundColor='#218838'" 
+                        onmouseout="this.style.backgroundColor='#28a745'">
+                    VS
+                </button>
             </div>
 
             <!-- Second State -->
@@ -79,15 +76,7 @@
                         <strong>State 2</strong>
                     </div>
                     <div class="card-body">
-                        <form id="compForm2" class="d-flex">
-                            <input class="form-control me-2" type="search" id="compInput2" placeholder="Search for a state" aria-label="Search">
-                            <button class="btn" type="submit" 
-                                style="background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 12px 24px; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease; font-size: 16px; font-weight: bold;" 
-                                onmouseover="this.style.backgroundColor='#218838'" 
-                                onmouseout="this.style.backgroundColor='#28a745'">
-                                Search
-                            </button>
-                        </form>
+                        <input class="form-control me-2" type="search" id="compInput2" placeholder="Search for a state" aria-label="Search">
                         <div id="stateData2" class="mt-4"></div>
                     </div>
                 </div>
