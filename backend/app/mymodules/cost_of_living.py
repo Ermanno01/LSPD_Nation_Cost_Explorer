@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 
+
 class Cost_of_living:
     """
     A class to handle cost of living data from a CSV file.
