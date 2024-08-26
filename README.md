@@ -75,4 +75,4 @@ Feel free to contact me at **886878@stud.unive.it**
 
 ## Screen
 
-![alt text](./site_view.png)
+![alt text](./site_view1.png)
